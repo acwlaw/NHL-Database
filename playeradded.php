@@ -9,30 +9,52 @@ if(isset($_POST['submit'])){
     $data_missing = array();
 
     if(empty($_POST['name'])){
-        // Adds name to array
-        $data_missing[] = 'Player Name';
+        $data_missing[] = 'name';
     } else {
-        // Trim white space from the name and store the name
-        $f_name = trim($_POST['name']);
+        $name = trim($_POST['name']);
     }
 
     if(empty($_POST['position'])){
-        // Adds position to array
         $data_missing[] = 'Position';
-    } else{
-        // Trim white space from the name and store the name
-        $l_name = trim($_POST['position']);
+    } else {
+        $position = trim($_POST['position']);
+    }
+
+    if(empty($_POST['type'])){
+        $data_missing[] = 'type';
+    } else {
+        $type = trim($_POST['type']);
+    }
+
+    if(empty($_POST['team'])){
+        $data_missing[] = 'team';
+    } else {
+        $team = trim($_POST['team']);
+    }
+
+    if(empty($_POST['year'])){
+        $data_missing[] = 'year';
+    } else {
+        $year = trim($_POST['year']);
     }
 
     if(empty($data_missing)){
-        require_once('../mysqli_connect.php');
+        require_once('../../mysqli_connect.php');
+        
         $query = "INSERT INTO players (name, position) VALUES (?, ?)";
         $stmt = mysqli_prepare($dbc, $query);
         mysqli_stmt_bind_param($stmt, "ss", $f_name, $l_name);
         mysqli_stmt_execute($stmt);
         $affected_rows = mysqli_stmt_affected_rows($stmt);
+        
+        /*if ($type == 
+        $query = "INSERT INTO players (name, position) VALUES (?, ?)";
+        $stmt = mysqli_prepare($dbc, $query);
+        mysqli_stmt_bind_param($stmt, "ss", $f_name, $l_name);
+        mysqli_stmt_execute($stmt);
+        $affected_rows = mysqli_stmt_affected_rows($stmt);*/
 
-        if($affected_rows == 1){
+        if ($affected_rows == 1){
             echo 'Player Entered';
             mysqli_stmt_close($stmt);
             mysqli_close($dbc);

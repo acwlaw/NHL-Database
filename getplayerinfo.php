@@ -1,6 +1,6 @@
 <?php
 // Get a connection for the database
-require_once('../mysqli_connect.php');
+require_once('../../mysqli_connect.php');
 
 // Create queries for the database
 $skaterquery = "SELECT TOP 10 name, year, PIM, points, assists, goals, SOG, plusminus
@@ -86,7 +86,7 @@ if ($goaliequery) {
       echo "Couldn't issue database query<br />";
       echo mysqli_error($dbc);
   }
-}
+
 
 // Close connection to the database
 mysqli_close($dbc);
