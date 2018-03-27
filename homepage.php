@@ -6,11 +6,11 @@
 <body>
   <h1>NHL Database</h1>
 
-  <form action="addplayer.html">
+  <form action="addplayer.php">
     <input type="submit" value="Add player"/>
   </form>
 
-  <form action="addgameevent.html">
+  <form action="addgame.php">
     <input type="submit" value="Add game event"/>
   </form>
 

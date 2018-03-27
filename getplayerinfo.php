@@ -3,10 +3,10 @@
 require_once('../../mysqli_connect.php');
 
 // Create queries for the database
-$skaterquery = "SELECT TOP 10 name, year, PIM, points, assists, goals, SOG, plusminus
+$skaterquery = "SELECT name, year, PIM, points, assists, goals, SOG, plusminus
           FROM skater_statistic
           ORDER BY points";
-$goaliequery = "SELECT TOP 5 name, year, win, loss, tie, GAA, saving_percent, SO
+$goaliequery = "SELECT name, year, win, loss, tie, GAA, saving_percent, SO
                 FROM goalie_statistic
                 ORDER BY win";
 // Get a response from the database by sending the connection
@@ -49,11 +49,11 @@ if($skaterresponse){
   }
   echo '</table>';
   } else {
-    echo "Couldn't issue database query<br />";
+    echo "Couldn't issue database query1<br />";
     echo mysqli_error($dbc);
 }
 
-if ($goaliequery) {
+if ($goalieresponse) {
   echo '<table align="left"
   cellspacing="5" cellpadding="8">
 
@@ -74,9 +74,9 @@ if ($goaliequery) {
         '</td><td align="left">' .$row['win'] .
         '</td><td align="left">' .$row['loss'] .
         '</td><td align="left">' .$row['tie'] .
-        '</td><td align="left">' .$row['gaa'] .
+        '</td><td align="left">' .$row['GAA'] .
         '</td><td align="left">' .$row['saving_percent'] .
-        '</td><td align="left">' .$row['so'] .
+        '</td><td align="left">' .$row['SO'] .
         '</td>';
 
     echo '</tr>';
