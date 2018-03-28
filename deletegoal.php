@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>Add Goal</title>
+<title>Delete Goal</title>
 </head>
 <body onload="showDates(document.getElementById('location').value)">
 
@@ -14,13 +14,7 @@ if(isset($_POST['submit'])){
         }
         $$key = $value;
     }
-    // $date, $location, $name, $assist1, $assist2, $min, $sec, $period // are set now
-    if ($assist1 == 'null') {
-        $assist1 = NULL;
-    }
-    if ($assist2 == 'null') {
-        $assist2 = NULL;
-    }
+    // $date, $location, $min, $sec, $period // are set now
     if ($sec < 10) {
         $sec = '0'.$sec;
     }
@@ -32,29 +26,15 @@ if(isset($_POST['submit'])){
         if(mysqli_fetch_array(mysqli_query($dbc, 'SELECT date, location, goal_time
             FROM goal
             WHERE date = "'.$date.'" AND location = "'.$location.'" AND goal_time = "'.$goal_time.'" AND goal_period = "'.$period.'"'))['date'] == $date) {
-            // Goal already exists
-            echo 'This goal already exists';
+            // Goal exists
+            $query = 'DELETE FROM goal WHERE date = "'.$date.'" AND location = "'.$location.'" AND goal_time = "'.$goal_time.'" AND goal_period = "'.$period.'"';
+            $stmt = mysqli_prepare($dbc, $query);
+            mysqli_stmt_execute($stmt);
+            echo 'Goal Removed';
         } else {
             // Goal does not exist
-            if ($assist1 == NULL && $assist2 != NULL) {
-                $temp = $assist1;
-                $assist1 = $assist2;
-                $assist2 = $temp;
-            }
-            $query = "INSERT INTO goal VALUES (?, ?, ?, ?, ?, ?, ?)";
-            $stmt = mysqli_prepare($dbc, $query);
-            mysqli_stmt_bind_param($stmt, "ssssssi", $date, $location, $name, $assist1, $assist2, $goal_time, $period);
-            mysqli_stmt_execute($stmt);
-            $affected_rows = mysqli_stmt_affected_rows($stmt);
-
-            if ($affected_rows == 1){
-                echo 'Goal Entered';
-            } else {
-                echo 'Unknown Error Occurred<br />';
-                //echo mysqli_error();
-            }
-            //mysqli_stmt_close($stmt);
-            //mysqli_close($dbc);
+            // Do nothing
+            echo 'Goal does not exist.';
         }
     } else {
         echo 'You need to enter the following data<br />';
@@ -68,7 +48,7 @@ if(isset($_POST['submit'])){
 
 <form action="" method="post">
 
-    <b>Add a New Goal</b><br>
+    <b>Delete a Goal</b><br>
     
     Location:<br>
     <select name="location" id="location" onchange="showDates(this.value)">
@@ -151,50 +131,6 @@ if(isset($_POST['submit'])){
     <select name="sec">
     <?php for ($i = 0; $i <= 59; $i++) {
         echo '<option>'.$i.'</option>'; } ?>
-    </select><br>
-    
-    Player:<br>
-    <select name="name">
-        <?php
-        require_once('../../mysqli_connect.php');
-        $query = "SELECT name
-            FROM players";
-        $response = mysqli_query($dbc, $query);
-        if($response) {
-          while($row = mysqli_fetch_array($response)) {
-            echo "<option>" . $row['name'] . "</option>";
-          }
-        } ?>
-    </select><br>
-    
-    Assist 1 (optional):<br>
-    <select name="assist1">
-        <option value="null" selected>Select a player</option>
-        <?php
-        require_once('../../mysqli_connect.php');
-        $query = "SELECT name
-            FROM players";
-        $response = mysqli_query($dbc, $query);
-        if($response) {
-          while($row = mysqli_fetch_array($response)) {
-            echo "<option>" . $row['name'] . "</option>";
-          }
-        } ?>
-    </select><br>
-    
-    Assist 2 (optional):<br>
-    <select name="assist2">
-        <option value="null" selected>Select a player</option>
-        <?php
-        require_once('../../mysqli_connect.php');
-        $query = "SELECT name
-            FROM players";
-        $response = mysqli_query($dbc, $query);
-        if($response) {
-          while($row = mysqli_fetch_array($response)) {
-            echo "<option>" . $row['name'] . "</option>";
-          }
-        } ?>
     </select><br>
   
     <input type="submit" name="submit" value="Submit">

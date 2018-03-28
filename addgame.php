@@ -10,11 +10,21 @@ if(isset($_POST['submit'])){
     $data_missing = array();
     foreach($_POST as $key => $value) {
         if(empty($value)) {
-            $data_missing[] = $key;
+            if ($key != "a_score" && $key != "b_score") {
+                $data_missing[] = $key;
+            }
         }
         $$key = $value;
     }
     // $date, $time, $location, $a_score, $b_score, $a_team, $b_team // are set now
+    //$a_score = $a_score == '' ? NULL : $a_score;
+    //$b_score = $b_score == '' ? NULL : $a_score;
+    if ($a_score == '') {
+        $a_score = NULL;
+    }
+    if ($b_score == '') {
+        $b_score = NULL;
+    }
     
     if(empty($data_missing)){
         require_once('../../mysqli_connect.php');

@@ -1,0 +1,99 @@
+TOTAL: 20 points
+
+
+
+
+
+(2 points) Selection and projection query: pick one query of this category and provide an interface
+for the user to specify the selection condition and the attributes to be returned.
+- Rerun with another constant
+
+
+
+
+
+
+(1 point) Join query: pick one query of this category and provide an interface for the user to choose
+this query.
+
+
+
+
+
+
+
+
+(2 point) Division query: pick one query of this category and provide an interface for the user to
+choose this query.
+- Insert a new tuple and rerun
+
+
+
+
+
+(2 point) Aggregation query: pick one query that requires the use of aggregation (min, max,
+average, or count are all fine).
+- Rerun with a different aggregation
+
+
+
+
+
+(4 points) Nested aggregation with group-by: pick one query that finds the average for each group
+and then finds either the minimum or maximum across all those averages. Provide an interface for
+the user to specify whether the minimum or maximum is requested.
+- Show query or view (2)
+- Rerun with a different aggregation (2)
+
+
+
+
+
+(4 point) Delete operation: implement a delete operation. Provide an interface for the user to
+specify some input for the deletion operation. Include an interface for the user to display the
+relation instance after the operation.
+- Case 1 - deletion with cascades. Student to explain the theory of cascading and show their
+code that implements this (2)
+o Example: customer with their associated accounts. If you delete a customer from
+the database, it makes sense to also delete the associated account
+- Case 2 – explain any delete without cascading (you do not have to implement this, but you
+will need to provide a deletion example within your product that does not require
+cascading)
+
+
+
+
+
+(2 points) Update operation: implement a constraint using the check statement. Provide an
+interface for the user to specify some input for the update operation. Some input values would
+successfully satisfy a constraint while others would fail. Provide an interface for the user to display
+the relation after the operation.
+- Note that MySQL 5.5 does not support the Check constraint. If your team is using MySQL
+5.5, keep the check in the SQL statement, but actually do the check at the application level
+(and comment it in the code).
+- Update a value that violates some constraint (1)
+- Correct the value and update again (1)
+
+
+
+
+(3 points) Graphical user interface: create an easy to use GUI that allows the users to execute all the
+above operations and transactions. Use the menu facility provided by the graphics environment you
+use to define appropriate menus and submenus. Make sure to design your interface in such a way
+that all the error messages appear in separate pop-up boxes, or in a designated area of the main
+window, so that they do not interfere with the other activities. Whenever user input is requested,
+make sure that there is sufficient type checking.
+- Type checking
+- Location of error messages
+- Look of GUI
+
+
+
+
+
+(Bonus Points) Extra features: Create unique features that your application supports. You can really
+be creative about this. Some examples are using Bootstrap to prettify your UI, implementing
+Triggers and Privileges in the database, using any cloud-based databases. See the marking scheme
+for more examples and the breakdown.
+Keep in mind these bonus points have a HIGH standard to meet. Out of all the groups only a small
+handful will receive a bonus point, and maybe one or two groups will receive two bonus points. 
