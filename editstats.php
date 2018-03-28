@@ -1,11 +1,20 @@
 <html>
 <head>
+<title></title>
+</head>
+<body>
+
+<style>
+.stats-field {
+    width: 60px;
+}
+</style>
 
 <?php
 
-if (!isset($_POST['choice'])) {
+if (!isset($_POST['type'])) {
     echo '<form method="post" action="">
-        <select name="choice">
+        <select name="type">
             <option value="skater">Skater Statistics</option>
             <option value="goalie">Goalie Statistics</option>
             <option value="team">Team Statistics</option>
@@ -13,7 +22,7 @@ if (!isset($_POST['choice'])) {
         <input name="choicesubmit" type="submit" value="Submit">
     </form>';
 } else {
-    $type = $_POST['choice'];
+    $type = $_POST['type'];
     require_once('../../mysqli_connect.php');
 
     $columns = array(
@@ -30,19 +39,16 @@ if (!isset($_POST['choice'])) {
 
     $order = array("skater" => "points", "goalie" => "win", "team" => "win");
 
-    // Create queries for the database
+    // QUERY
     $query = 'SELECT';
     foreach ($columns[$type] as $i => $column) {
         $query = $i == 0 ? $query.' '.$column : $query.', '.$column;
     }
     $query = $query.' FROM '.$type.'_statistic ORDER BY '.$order[$type];
-
-    // Get a response from the database by sending the connection
-    // and the query
     $response = @mysqli_query($dbc, $query);
 
-    // If the query executed properly proceed
     if($response){
+        // CREATE DATA ARRAY
         $data = array();
         $headings = array();
         while($row = mysqli_fetch_array($response)) {
@@ -57,7 +63,7 @@ if (!isset($_POST['choice'])) {
         }
         $headings = array_unique($headings);
         /*
-        [Roberto Luongo] => Array
+        [Wayne Gretzky] => Array
             (
                 [1982] => Array
                     (
@@ -70,6 +76,7 @@ if (!isset($_POST['choice'])) {
         
         // IF DATA IS SUBMITTED
         if (isset($_POST['submit'])) {
+            $fail = false;
             foreach ($_POST['data'] as $name => $namedata) {
                 foreach ($namedata as $year => $yeardata) {
                     foreach ($yeardata as $key => $value) {
@@ -79,16 +86,19 @@ if (!isset($_POST['choice'])) {
                             $stmt = mysqli_prepare($dbc, $query);
                             mysqli_stmt_execute($stmt);
                             $affected_rows = mysqli_stmt_affected_rows($stmt);
-
+                            
                             if ($affected_rows == 1){
-                                echo 'Stat Entered';
                             } else {
                                 echo 'Unknown Error Occurred<br />';
                                 //echo mysqli_error();
+                                $fail = true;
                             }
                         }
                     }
                 }
+            }
+            if (!$fail) {
+                echo 'Stats Updated';
             }
             $data = $_POST['data'];
         }
@@ -147,24 +157,18 @@ if (!isset($_POST['choice'])) {
         }
         
         // END TABLE AND FORM
-        echo '</table><input type="submit" name="submit" value="submit"></form>';
+        echo '</table><input type="submit" name="submit" value="submit"><input type="hidden" name="type" value="'.$type.'"></form>';
     } else {
         echo "Couldn't issue database query<br />";
         echo mysqli_error($dbc);
     }
+    mysqli_close($dbc);
 }
-
 ?>
-<title>Edit <?=ucfirst($type)?> Statistics</title>
-</head>
-<body>
 
-<style>
-.stats-field {
-    width: 60px;
-}
-</style>
-  
-<? mysqli_close($dbc); ?>
+<script>
+document.title = "Edit<?php echo isset($type) ? ' '.ucfirst($type) : '';?> Statistics"
+</script>
+
 </body>
 </html>
