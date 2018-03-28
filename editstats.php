@@ -49,8 +49,8 @@ if (!isset($_POST['type'])) {
 
     if($response){
         // CREATE DATA ARRAY
-        $data = array();
         $headings = array();
+        $data = array();
         while($row = mysqli_fetch_array($response)) {
             foreach ($row as $key => $value) {
                 if (!is_int($key)) {
@@ -73,34 +73,13 @@ if (!isset($_POST['type'])) {
                 [1983] => Array(...)
             )
         */
-        
-        // IF DATA IS SUBMITTED
-        if (isset($_POST['submit'])) {
-            $fail = false;
-            foreach ($_POST['data'] as $name => $namedata) {
-                foreach ($namedata as $year => $yeardata) {
-                    foreach ($yeardata as $key => $value) {
-                        if ($value != $data[$name][$year][$key]) {
-                            $query = 'UPDATE '.$type.'_statistic SET '.$key.' = '.$value.' WHERE '.$columns[$type][0].' = "'.$name.'" AND year = '.$year;
-                            
-                            $stmt = mysqli_prepare($dbc, $query);
-                            mysqli_stmt_execute($stmt);
-                            $affected_rows = mysqli_stmt_affected_rows($stmt);
-                            
-                            if ($affected_rows == 1){
-                            } else {
-                                echo 'Unknown Error Occurred<br />';
-                                //echo mysqli_error();
-                                $fail = true;
-                            }
-                        }
-                    }
-                }
+    
+        function checkConstraint($key, $value) {
+            switch ($key) {
+                case "plusminus": return true;
+                case "saving_percent": return $value >= 0 && $value <= 1;
+                default: return $value >= 0;
             }
-            if (!$fail) {
-                echo 'Stats Updated';
-            }
-            $data = $_POST['data'];
         }
         
         // PREPARE HEADINGS WITH DATABSE KEY => HEADING
@@ -124,6 +103,39 @@ if (!isset($_POST['type'])) {
             'goals_against' => 'Goals Against'
         );
         
+        // IF DATA IS SUBMITTED
+        if (isset($_POST['submit'])) {
+            $constraintViolation = array();
+            $fail = false;
+            foreach ($_POST['data'] as $name => $namedata) {
+                foreach ($namedata as $year => $yeardata) {
+                    foreach ($yeardata as $key => $value) {
+                        // IF VALUE HAS CHANGED
+                        if ($value != $data[$name][$year][$key]) {
+                            if (checkConstraint($key, $value)) {
+                                $query = 'UPDATE '.$type.'_statistic SET '.$key.' = '.$value.' WHERE '.$columns[$type][0].' = "'.$name.'" AND year = '.$year;
+                                
+                                $stmt = mysqli_prepare($dbc, $query);
+                                mysqli_stmt_execute($stmt);
+                                $affected_rows = mysqli_stmt_affected_rows($stmt);
+                                
+                                if ($affected_rows == 1){
+                                } else {
+                                    echo 'Unknown Error Occurred<br />';
+                                    //echo mysqli_error();
+                                    $fail = true;
+                                }
+                            } else {
+                                $constraintViolation[] = $name.' &raquo; '.$year.' &raquo; '.$formatted[$key].': '.$value.' is not a valid input.';
+                                $_POST['data'][$name][$year][$key] = $data[$name][$year][$key];
+                            }
+                        }
+                    }
+                }
+            }
+            $data = $_POST['data'];
+        }
+        
         // BEGIN FORM AND TABLE
         echo '<form action="" method="post">
         <table border="1" cellpadding="2" style="border: 1px solid black; border-collapse:collapse">
@@ -146,8 +158,11 @@ if (!isset($_POST['type'])) {
                     if ($key == $columns[$type][0] || $key == "year") { // primary key
                         echo '<td class="'.$key.' noedit">'.$value.'</td>
                         ';
+                    } else if ($key == "points") {
+                        echo '<td class="'.$key.' edit">'.$value.'<input class="stats-field" type="hidden" name="data['.$name.']['.$year.']['.$key.']" value="'.$value.'"></td>
+                        ';
                     } else {
-                        echo '<td class="'.$key.' edit"><input class="stats-field" type="number" name="data['.$name.']['.$year.']['.$key.']" value="'.$value.'"></td>
+                        echo '<td class="'.$key.' edit"><input class="stats-field" type="number" step="0.001" name="data['.$name.']['.$year.']['.$key.']" value="'.$value.'"></td>
                         ';
                     }
                 }
@@ -164,6 +179,14 @@ if (!isset($_POST['type'])) {
     }
     mysqli_close($dbc);
 }
+    if (isset($fail) && !$fail) {
+        echo 'Stats Updated.<br>';
+    }
+    if (!empty($constraintViolation)) {
+        foreach ($constraintViolation as $i => $message) {
+            echo 'Error: '.$message.'<br>';
+        }
+    }
 ?>
 
 <script>
