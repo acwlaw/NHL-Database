@@ -91,7 +91,7 @@ if(isset($_POST['submit'])){
               while($row = mysqli_fetch_array($response)) {
                 echo "<option>" . $row['team_name'] . "</option>";
               }
-            } ?>("")
+            } ?>
         </select>
     </div>
 

@@ -10,14 +10,14 @@
   <form action="homepageresults.php" method="post">
   Statistic group:
     <select id="groupSelectBox" name="group_statistic" onchange="groupSelectType()">
-      <option value="player">Player Statistic</option>
+      <option value="skater">Skater Statistic</option>
       <option value="goalie">Goalie Statistic</option>
       <option value="team">Team Statistic</option>
     </select>
 
-  <div id="player">
+  <div id="skater">
     Type of statistic:
-    <select name="player_statistic">
+    <select name="skater_statistic">
       <option>Goals</option>
       <option value="assist">Assists</option>
       <option>Points</option>
@@ -42,7 +42,7 @@
   <div style="display: none" id="team">
     Type of statistic:
     <select name="team_statistic">
-      <option>Wins</option>
+      <option>Win</option>
       <option>Loss</option>
       <option value="goals_for">Goals For</option>
       <option value="goals_against">Goals Against</option>
@@ -55,7 +55,7 @@
     function groupSelectType() {
       var selectBox = document.getElementById("groupSelectBox");
       var selectedValue = selectBox.options[selectBox.selectedIndex].value;
-      document.getElementById("player").style.display = "none";
+      document.getElementById("skater").style.display = "none";
       document.getElementById("goalie").style.display = "none";
       document.getElementById("team").style.display = "none";
       document.getElementById(selectedValue).style.display = "";
