@@ -16,10 +16,10 @@ $goalieresponse = @mysqli_query($dbc, $goaliequery);
 
 // If the query executed properly proceed
 if($skaterresponse){
-    
+
   echo '<table align="left"
   cellspacing="5" cellpadding="8">
-  
+
   <tr>
   	<td align="left"><b>Name</b></td>
     <td align="left"><b>Year</b></td>
@@ -55,6 +55,7 @@ if($skaterresponse){
 }
 
 if ($goalieresponse) {
+
   echo '<table align="left"
   cellspacing="5" cellpadding="8">
 

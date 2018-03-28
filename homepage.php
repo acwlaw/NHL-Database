@@ -5,15 +5,62 @@
 </head>
 <body>
   <h1>NHL Database</h1>
+  <b>What would you like to see?<br></b>
 
-  <form action="addplayer.php">
-    <input type="submit" value="Add player"/>
+  <form action="homepageresults.php" method="post">
+  Statistic group:
+    <select id="groupSelectBox" name="group_statistic" onchange="groupSelectType()">
+      <option value="player">Player Statistic</option>
+      <option value="goalie">Goalie Statistic</option>
+      <option value="team">Team Statistic</option>
+    </select>
+
+  <div id="player">
+    Type of statistic:
+    <select name="player_statistic">
+      <option>Goals</option>
+      <option value="assist">Assists</option>
+      <option>Points</option>
+      <option>PIM</option>
+      <option>SOG</option>
+      <option value="plusminus">+/-</option>
+    </select>
+  </div>
+
+  <div style="display: none" id="goalie">
+    Type of statistic:
+      <select name="goalie_statistic">
+        <option>Win</option>
+        <option>Loss</option>
+        <option>Tie</option>
+        <option>GAA</option>
+        <option>sv%</option>
+        <option>SO</option>
+      </select>
+  </div>
+
+  <div style="display: none" id="team">
+    Type of statistic:
+    <select name="team_statistic">
+      <option>Wins</option>
+      <option>Loss</option>
+      <option value="goals_for">Goals For</option>
+      <option value="goals_against">Goals Against</option>
+    </select>
+  </div>
+  <input type="submit" name="submit" value="Submit">
   </form>
 
-  <form action="addgame.php">
-    <input type="submit" value="Add game"/>
-  </form>
+  <script>
+    function groupSelectType() {
+      var selectBox = document.getElementById("groupSelectBox");
+      var selectedValue = selectBox.options[selectBox.selectedIndex].value;
+      document.getElementById("player").style.display = "none";
+      document.getElementById("goalie").style.display = "none";
+      document.getElementById("team").style.display = "none";
+      document.getElementById(selectedValue).style.display = "";
+    }
+  </script>
 
 </body>
-
 </html>

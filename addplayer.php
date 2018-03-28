@@ -33,7 +33,7 @@ if(isset($_POST['submit'])){
             mysqli_stmt_bind_param($stmt, "ss", $name, $position);
             mysqli_stmt_execute($stmt);
             $affected_rows = mysqli_stmt_affected_rows($stmt);
-            
+
             // Add player to specific type
             $stmt = mysqli_prepare($dbc, "INSERT INTO " . $type . " VALUES (?, ?)");
             if ($type == "active" || $type == "free") {
@@ -69,10 +69,10 @@ if(isset($_POST['submit'])){
 
     Name:<br>
     <input type="text" name="name"><br>
-    
+
     Position:<br>
     <input type="text" name="position"><br>
-    
+
     Status:<br>
     <input type="radio" name="type" value="active" onclick="showTeam()" checked>Active<br>
     <input type="radio" name="type" value="retired" onclick="showYear()">Retired<br>
@@ -91,7 +91,7 @@ if(isset($_POST['submit'])){
               while($row = mysqli_fetch_array($response)) {
                 echo "<option>" . $row['team_name'] . "</option>";
               }
-            } ?>
+            } ?>("")
         </select>
     </div>
 
@@ -104,7 +104,7 @@ if(isset($_POST['submit'])){
 
     <input type="submit" name="submit" value="Submit">
 </form>
-  
+
 <script>
     function showTeam() {
         document.getElementById("team").style.display = "";
@@ -115,7 +115,7 @@ if(isset($_POST['submit'])){
         document.getElementById("team").style.display = "none";
     }
 </script>
-  
+
 <? mysqli_close($dbc); ?>
 </body>
 </html>
