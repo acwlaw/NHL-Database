@@ -11,7 +11,7 @@
   </form>
 
   <form action="addgame.php">
-    <input type="submit" value="Add game event"/>
+    <input type="submit" value="Add game"/>
   </form>
 
 </body>

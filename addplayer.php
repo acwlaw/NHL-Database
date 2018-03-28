@@ -19,6 +19,7 @@ if(isset($_POST['submit'])){
 
     if(empty($data_missing)){
         require_once('../../mysqli_connect.php');
+        // Check primary keys for if this row already exists
         if(mysqli_fetch_array(mysqli_query($dbc, "SELECT name
             FROM players
             WHERE name = '" . $name . "'"))['name'] == $name) {
@@ -101,7 +102,7 @@ if(isset($_POST['submit'])){
         </select><br>
     </div>
 
-    <input type="submit" name="submit" value="Add Player">
+    <input type="submit" name="submit" value="Submit">
 </form>
   
 <script>

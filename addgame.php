@@ -15,15 +15,13 @@ if(isset($_POST['submit'])){
         $$key = $value;
     }
     // $date, $time, $location, $a_score, $b_score, $a_team, $b_team // are set now
-
-    echo "SELECT date, location
-            FROM game
-            WHERE date = '".$date."' AND location = '".$location."'";
+    
     if(empty($data_missing)){
         require_once('../../mysqli_connect.php');
-        if(mysqli_fetch_array(mysqli_query($dbc, "SELECT date, location
+        // Check primary keys for if this row already exists
+        if(mysqli_fetch_array(mysqli_query($dbc, 'SELECT date, location
             FROM game
-            WHERE date = '".$date."' AND location = '".$location."'"))['date'] == $date) {
+            WHERE date = "'.$date.'" AND location = "'.$location.'"'))['date'] == $date) {
             // Game already exists
             echo 'This game already exists';
         } else {
@@ -108,7 +106,7 @@ if(isset($_POST['submit'])){
     <input name="a_score" type="number" min="0" max="999">
     <input name="b_score" type="number" min="0" max="999"><br>
   
-    <input type="submit" name="submit" value="Add Game">
+    <input type="submit" name="submit" value="Submit">
 </form>
   
 <? mysqli_close($dbc); ?>
