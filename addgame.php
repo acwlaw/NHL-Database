@@ -25,7 +25,7 @@ if(isset($_POST['submit'])){
     if ($b_score == '') {
         $b_score = NULL;
     }
-    
+
     if(empty($data_missing)){
         require_once('../../mysqli_connect.php');
         // Check primary keys for if this row already exists
@@ -64,10 +64,10 @@ if(isset($_POST['submit'])){
 <form action="" method="post">
 
     <b>Add a New Game</b><br>
-    
+
     Date:<br>
     <input name="date" type="date" min="1917-11-26"><br>
-    
+
     Time (ET):<br>
     <select name="time">
     <?php for ($h = 0; $h <= 23; $h++) {
@@ -78,10 +78,10 @@ if(isset($_POST['submit'])){
             }
     } ?>
     </select><br>
-    
+
     Location:<br>
     <input name="location" type="text" maxlength="40"><br>
-    
+
     Home Team:<br>
     <select name="a_team">
         <?php
@@ -96,7 +96,7 @@ if(isset($_POST['submit'])){
           }
         } ?>
     </select><br>
-    
+
     Away Team:<br>
     <select name="b_team">
         <?php
@@ -111,14 +111,14 @@ if(isset($_POST['submit'])){
           }
         } ?>
     </select><br>
-    
-    Score:<br>
+
+    Score (home / away):<br>
     <input name="a_score" type="number" min="0" max="999">
     <input name="b_score" type="number" min="0" max="999"><br>
-  
+
     <input type="submit" name="submit" value="Submit">
 </form>
-  
+
 <? mysqli_close($dbc); ?>
 </body>
 </html>

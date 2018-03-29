@@ -134,7 +134,7 @@
     <input type="submit" name="submit" value="Submit"><br>
   </form>
 
-  <b>UH OH! Stat of the day ALERT!!</b><br>
+  <b>Stat of the day (04/05/18):</b><br>
   To find out all teams that have played a home game against every other team,
   click <a href="statoftheday.php">here</a>.<br>
   <br>
