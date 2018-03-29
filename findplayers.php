@@ -12,7 +12,7 @@ if(isset($_POST)) {
 
   require_once('../../mysqli_connect.php');
 
-  $query = "SELECT name, position, team_name, city
+  $query = "SELECT name, position, team_name
             FROM active
             NATURAL JOIN players
             WHERE team_name='$teamName'";
@@ -20,7 +20,6 @@ if(isset($_POST)) {
   $response = mysqli_query($dbc, $query);
 
   if($response) {
-    echo "<b>"$row['city']
     echo '<table align="left" cellspacing="5" cellpadding="8">
     <tr>
       <td align="left"><b>Name</b></td>

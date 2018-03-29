@@ -60,7 +60,7 @@
   <input type="submit" name="submit" value="Submit">
   </form>
 
-  <b>Interesting Stats:</b><br>
+  <!-- <b>Interesting Stats:</b><br>
   <form action="interestingstats.php" method="post">
     Find teams where all
     <select id="ISGroupSelectBox" name="group_statistic" onchange="ISSelectType()">
@@ -95,7 +95,7 @@
       <option>SO</option>
     </select>
     <input type="submit" name="submit" value="Submit">
-  </form>
+  </form> -->
 
   <b>See who's on what team:</b><br>
   <form action="findplayers.php" method="post">
@@ -116,9 +116,28 @@
     <input type="submit" name="submit" value="Submit">
   </form>
 
-  <b>Who is performing the best/worst in the league?</b><br>
+  <b>Who is performing the best/worst in the league this year?</b><br>
   <form action="bestworstplayers.php" method="post">
+    Select:
+    <br>
+      <input type="radio" name="status" value="best" checked>Best<br>
+      <input type="radio" name="status" value="worst">Worst<br>
+    <input type="submit" name="submit" value="Submit"><br>
+    <br>
+  </form>
 
+  <b>Which team has been performing the best/worst in recent years?</b><br>
+  <form action="bestworstteams.php" method="post">
+    Select:<br>
+      <input type="radio" name="status" value="best" checked>Best<br>
+      <input type="radio" name="status" value="worst" >Worst<br>
+    <input type="submit" name="submit" value="Submit"><br>
+  </form>
+
+  <b>UH OH! Stat of the day ALERT!!</b><br>
+  To find out all teams that have played a home game against every other team,
+  click <a href="statoftheday.php">here</a>.<br>
+  <br>
 
   <script>
     function top10SelectType() {
@@ -138,6 +157,12 @@
       document.getElementById(selectedValue).style.display = "";
     }
   </script>
+
+  <div style="position:absolute;right:0;bottom:0;width:144px;height:150px">
+    <a style="display:block" href=""><span style="font:bold 15px Comic Sans">shh... only if you're an admin click here</span><br>
+  <img src="shh.jpg" style="width:144px;height:81px">
+</a>
+</div>
 
 </body>
 </html>
