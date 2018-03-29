@@ -133,9 +133,9 @@
                         if ($value != $data[$i][$key]) {
                             if (checkConstraint($key, $value)) {
                                 if ($key == $otherKey[$type]) {
-                                    $query = 'UPDATE '.$type.' SET '.$key.' = "'.$value.'" WHERE name = "'.$values['name'].'"';
+                                    $query = 'UPDATE '.$type.' SET '.$key.' = "'.$value.'" WHERE name = "'.$data[$i]['name'].'"';
                                 } else { // $key is in players
-                                    $query = 'UPDATE players SET '.$key.' = "'.$value.'" WHERE name = "'.$values['name'].'"';
+                                    $query = 'UPDATE players SET '.$key.' = "'.$value.'" WHERE name = "'.$data[$i]['name'].'"';
                                 }
                                 $stmt = mysqli_prepare($dbc, $query);
                                 mysqli_stmt_execute($stmt);

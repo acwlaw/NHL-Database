@@ -12,22 +12,16 @@
 
 <?php
 
-if (!isset($_POST['type'])) {
-    echo '<form method="post" action="">
-        <select name="type">
-            <option value="skater">Skater Statistics</option>
-            <option value="goalie">Goalie Statistics</option>
-            <option value="team">Team Statistics</option>
-        </select>
-        <input name="choicesubmit" type="submit" value="Submit">
-    </form>';
+if (!isset($type)) {
+    echo '<a href="skater.php">Edit Skater Statistics</a><br>
+        <a href="goalie.php">Edit Goalie Statistics</a><br>
+        <a href="team.php">Edit Team Statistics</a><br>';
 } else {
-    $type = $_POST['type'];
-    require_once('../../mysqli_connect.php');
+    require_once('../../../mysqli_connect.php');
 
     $columns = array(
         "skater" => array(
-            "name", "year", "PIM", "points", "assists", "goals", "SOG", "plusminus"
+            "name", "year", "PIM", "points", "assist", "goals", "SOG", "plusminus"
         ),
         "goalie" => array(
             "name", "year", "win", "loss", "tie", "GAA", "saving_percent", "SO"
@@ -62,6 +56,7 @@ if (!isset($_POST['type'])) {
             }
         }
         $headings = array_unique($headings);
+        $headings[] = "delete";
         /*
         [Wayne Gretzky] => Array
             (
@@ -82,6 +77,16 @@ if (!isset($_POST['type'])) {
             }
         }
         
+        function incrementAmount($key) {
+            if ($key == 'saving_percent') {
+                return 0.001;
+            } else if ($key == 'GAA') {
+                return 0.01;
+            } else {
+                return 1;
+            }
+        }
+        
         // PREPARE HEADINGS WITH DATABSE KEY => HEADING
         $formatted = array(
             'name' => 'Name',
@@ -94,18 +99,19 @@ if (!isset($_POST['type'])) {
             'SO' => 'SO',
             'PIM' => 'PIM',
             'points' => 'Points',
-            'assists' => 'Assists',
+            'assist' => 'Assist',
             'goals' => 'Goals',
             'SOG' => 'SOG',
             'plusminus' => '+/-',
             'team_name' => 'Team',
             'goals_for' => 'Goals For',
-            'goals_against' => 'Goals Against'
+            'goals_against' => 'Goals Against',
+            'delete' => 'Delete'
         );
         
         // IF DATA IS SUBMITTED
         if (isset($_POST['submit'])) {
-            $constraintViolation = array();
+            $errors = array();
             $fail = false;
             foreach ($_POST['data'] as $name => $namedata) {
                 foreach ($namedata as $year => $yeardata) {
@@ -126,67 +132,69 @@ if (!isset($_POST['type'])) {
                                     $fail = true;
                                 }
                             } else {
-                                $constraintViolation[] = $name.' &raquo; '.$year.' &raquo; '.$formatted[$key].': '.$value.' is not a valid input.';
+                                $errors[] = $name.' &raquo; '.$year.' &raquo; '.$formatted[$key].': '.$value.' is not a valid input.';
                                 $_POST['data'][$name][$year][$key] = $data[$name][$year][$key];
                             }
                         }
                     }
                 }
             }
-            $data = $_POST['data'];
-        }
-        
-        // BEGIN FORM AND TABLE
-        echo '<form action="" method="post">
-        <table border="1" cellpadding="2" style="border: 1px solid black; border-collapse:collapse">
-        <tr>';
-        
-        // HEADINGS
-        foreach ($headings as $_ => $heading) {
-            echo '<td><b>'.$formatted[$heading].'</b></td>';
-        }
-        
-        // DATA
-        echo '</tr>';
-        foreach ($data as $name => $namedata) {
-            foreach ($namedata as $year => $nameyeardata) {
-                echo '<tr>
-                <td class="'.$columns[$type][0].' noedit">'.$name.'</td>
-                <td class="'.$year.' noedit">'.$year.'</td>
-                ';
-                foreach ($nameyeardata as $key => $value) {
-                    if ($key == $columns[$type][0] || $key == "year") { // primary key
-                        echo '<td class="'.$key.' noedit">'.$value.'</td>
-                        ';
-                    } else if ($key == "points") {
-                        echo '<td class="'.$key.' edit">'.$value.'<input class="stats-field" type="hidden" name="data['.$name.']['.$year.']['.$key.']" value="'.$value.'"></td>
-                        ';
-                    } else {
-                        echo '<td class="'.$key.' edit"><input class="stats-field" type="number" step="0.001" name="data['.$name.']['.$year.']['.$key.']" value="'.$value.'"></td>
-                        ';
-                    }
+            if (!empty($errors)) {
+                foreach ($errors as $i => $message) {
+                    echo 'Error: '.$message.'<br>';
                 }
+            } else {
+                echo 'Success!<br>';
+            }
+            echo '<br><a href="">Return</a>';
+        } else {
+        
+            // BEGIN FORM AND TABLE
+            echo '<form action="" method="post">
+            <table border="1" cellpadding="2" style="border: 1px solid black; border-collapse:collapse">
+            <tr>';
+            
+            // HEADINGS
+            foreach ($headings as $_ => $heading) {
+                echo '<td><b>'.$formatted[$heading].'</b></td>';
+            }
+            
+            // DATA
+            echo '</tr>';
+            foreach ($data as $name => $namedata) {
+                foreach ($namedata as $year => $nameyeardata) {
+                    echo '<tr>
+                    <td class="'.$columns[$type][0].' noedit">'.$name.'</td>
+                    <td class="'.$year.' noedit">'.$year.'</td>
+                    ';
+                    foreach ($nameyeardata as $key => $value) {
+                        if ($key == $columns[$type][0] || $key == "year") { // primary key
+                            echo '<td class="'.$key.' noedit">'.$value.'</td>
+                            ';
+                        } else if ($key == "points") {
+                            echo '<td class="'.$key.' edit">'.$value.'<input class="stats-field" type="hidden" name="data['.$name.']['.$year.']['.$key.']" value="'.$value.'"></td>
+                            ';
+                        } else {
+                            echo '<td class="'.$key.' edit"><input class="stats-field" type="number" step="'.incrementAmount($key).'" name="data['.$name.']['.$year.']['.$key.']" value="'.$value.'"></td>
+                            ';
+                        }
+                    }
+                // DELETE
+                echo '<td class="delete"><input type="checkbox" name="delete['.$name.']" value="true"></td>';
                 echo '</tr>
                 ';
+                }
             }
+            
+            // END TABLE AND FORM
+            echo '</table><input type="submit" name="submit" value="submit"><input type="hidden" name="type" value="'.$type.'"></form>';
         }
-        
-        // END TABLE AND FORM
-        echo '</table><input type="submit" name="submit" value="submit"><input type="hidden" name="type" value="'.$type.'"></form>';
     } else {
         echo "Couldn't issue database query<br />";
         echo mysqli_error($dbc);
     }
     mysqli_close($dbc);
 }
-    if (isset($fail) && !$fail) {
-        echo 'Stats Updated.<br>';
-    }
-    if (!empty($constraintViolation)) {
-        foreach ($constraintViolation as $i => $message) {
-            echo 'Error: '.$message.'<br>';
-        }
-    }
 ?>
 
 <script>
