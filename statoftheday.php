@@ -3,7 +3,7 @@
   <title>NHL Database</title>
 </head>
 <body>
-<h1>Here's your fucking stat of the day:<h1>
+<h1>Statistic of the day:<h1>
 
 <?php
 

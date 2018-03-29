@@ -3,7 +3,7 @@
   <title>NHL Database</title>
 </head>
 <body>
-<h1>Here's your fucking results:<h1>
+<h1>Query results:<h1>
 
 <?php
 $formattedName = array(
@@ -62,7 +62,8 @@ if (isset($_POST)) {
     $query = "SELECT $headerName, $type, year
               FROM ".$group."_statistic
               $formattedTime[$time]
-              ORDER BY $type $formattedPrint[$type]";
+              ORDER BY $type $formattedPrint[$type]
+              LIMIT 10";
     $response = mysqli_query($dbc, $query);
 
     if($response) {

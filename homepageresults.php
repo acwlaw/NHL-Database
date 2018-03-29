@@ -3,7 +3,7 @@
   <title>NHL Database</title>
 </head>
 <body>
-<h1>Here's your fucking results:<h1>
+<h1>Query results:<h1>
 
 <?php
 $formattedName = array(

@@ -15,7 +15,7 @@ if(isset($_POST['submit'])){
         $$key = $value;
     }
     // $team_name, $city // are set now
-    
+
     if(empty($data_missing)){
         require_once('../../mysqli_connect.php');
         // Check primary keys for if this row already exists
@@ -39,7 +39,7 @@ if(isset($_POST['submit'])){
                 //echo mysqli_error();
             }
             //mysqli_stmt_close($stmt);
-            //mysqli_close($dbc);
+
         }
     } else {
         echo 'You need to enter the following data<br />';
@@ -54,16 +54,17 @@ if(isset($_POST['submit'])){
 <form action="" method="post">
 
     <b>Add a New Team</b><br>
-    
+
     Team Name:<br>
     <input name="team_name" type="text" maxlength="200"><br>
-    
+
     City:<br>
     <input name="city" type="text" maxlength="200"><br>
-  
+
     <input type="submit" name="submit" value="Submit">
 </form>
-  
-<? mysqli_close($dbc); ?>
+
+
+
 </body>
 </html>

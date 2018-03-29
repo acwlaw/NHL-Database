@@ -3,7 +3,7 @@
   <title>NHL Database</title>
 </head>
 <body>
-<h1>Here's your fucking results:<h1>
+<h1>Query results:<h1>
 
 <?php
 
@@ -18,24 +18,20 @@ if (isset($_POST)) {
 
   require_once('../../mysqli_connect.php');
 
-  $query = "SELECT *
-FROM (SELECT *
-	FROM (
-		SELECT *, AVG(win) AS average
-		FROM team_statistic AS kappa
-		GROUP BY team_name
-	) AS kappapride )
-	AS kreygasm
-WHERE (team_name, average)
-	IN (
-		SELECT team_name, max(average)
-		FROM (SELECT *
-	FROM (
+  $query = "SELECT team_name, average
+FROM (
 		SELECT team_name, AVG(win) AS average
-		FROM team_statistic AS pogchamp
+		FROM team_statistic as thing1
+		GROUP BY team_name
+		) AS thing2
+WHERE average
+	IN (
+		SELECT $formattedStatus[$status](average)
+		FROM (
+		SELECT team_name, AVG(win) AS average
+		FROM team_statistic as thing3
 		GROUP BY team_name
 	)
-	AS biblethump)
 	AS wtf)";
 
   $response = mysqli_query($dbc, $query);
@@ -45,12 +41,12 @@ WHERE (team_name, average)
     cellspacing="5" cellpadding="8">
     <tr>
       <td align="center"><b>Team</b></td>
-      <td align="center"><b>Wins</b></td>
+      <td align="center"><b>Average Wins</b></td>
     </tr>
     <tr>';
     while($row = mysqli_fetch_array($response)) {
       echo '<td align="center">'.$row['team_name'].'</td>
-            <td align="center">'.$row['win'].'</td>';
+            <td align="center">'.$row['average'].'</td>';
       echo '</tr>';
     }
   } else {

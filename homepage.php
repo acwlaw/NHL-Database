@@ -159,7 +159,7 @@
   </script>
 
   <div style="position:absolute;right:0;bottom:0;width:144px;height:150px">
-    <a style="display:block" href=""><span style="font:bold 15px Comic Sans">shh... only if you're an admin click here</span><br>
+    <a style="display:block" href="adminpage.php"><span style="font:bold 15px Comic Sans">shh... only if you're an admin click here</span><br>
   <img src="shh.jpg" style="width:144px;height:81px">
 </a>
 </div>

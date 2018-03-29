@@ -120,6 +120,7 @@ if (!isset($type)) {
                         if ($value != $data[$name][$year][$key]) {
                             if (checkConstraint($key, $value)) {
                                 $query = 'UPDATE '.$type.'_statistic SET '.$key.' = '.$value.' WHERE '.$columns[$type][0].' = "'.$name.'" AND year = '.$year;
+                                
                                 $stmt = mysqli_prepare($dbc, $query);
                                 mysqli_stmt_execute($stmt);
                                 $affected_rows = mysqli_stmt_affected_rows($stmt);
@@ -129,15 +130,6 @@ if (!isset($type)) {
                                     echo 'Unknown Error Occurred<br />';
                                     //echo mysqli_error();
                                     $fail = true;
-                                }
-                                
-                                // UPDATE POINTS
-                                if ($key == "goals" || $key == "assist") {
-                                    $points = $yeardata['goals']+$yeardata['assist'];
-                                    $query = 'UPDATE '.$type.'_statistic SET points = '.$points.' WHERE '.$columns[$type][0].' = "'.$name.'" AND year = '.$year;
-                                    $stmt = mysqli_prepare($dbc, $query);
-                                    mysqli_stmt_execute($stmt);
-                                    $affected_rows = mysqli_stmt_affected_rows($stmt);
                                 }
                             } else {
                                 $errors[] = $name.' &raquo; '.$year.' &raquo; '.$formatted[$key].': '.$value.' is not a valid input.';
