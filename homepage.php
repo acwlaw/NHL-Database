@@ -5,11 +5,12 @@
 </head>
 <body>
   <h1>NHL Database</h1>
-  <b>What would you like to see?<br></b>
+  <p><b>What would you like to see?<br></b></p>
 
-  <form action="homepageresults.php" method="post">
+  <b>Top 10 Stats:</b><br>
+  <form action="top10results.php" method="post">
   Statistic group:
-    <select id="groupSelectBox" name="group_statistic" onchange="groupSelectType()">
+    <select id="top10SelectBox" name="group_statistic" onchange="top10SelectType()">
       <option value="skater">Skater Statistic</option>
       <option value="goalie">Goalie Statistic</option>
       <option value="team">Team Statistic</option>
@@ -19,7 +20,7 @@
     Type of statistic:
     <select name="skater_statistic">
       <option value=goals>Goals</option>
-      <option value="assist">Assists</option>
+      <option value="assist">assist</option>
       <option value="points">Points</option>
       <option>PIM</option>
       <option>SOG</option>
@@ -59,13 +60,81 @@
   <input type="submit" name="submit" value="Submit">
   </form>
 
+  <b>Interesting Stats:</b><br>
+  <form action="interestingstats.php" method="post">
+    Find teams where all
+    <select id="ISGroupSelectBox" name="group_statistic" onchange="ISSelectType()">
+      <option value="isskater">Skaters</option>
+      <option value="isgoalie">Goalies</option>
+    </select>
+    have
+    <select name="equality">
+      <option>></option>
+      <option><</option>
+    </select>
+    <select name="number">
+      <option>1</option>
+      <option>5</option>
+      <option>10</option>
+      <option>20</option>
+      <option>30</option>
+      <option>40</option>
+      <option>50</option>
+    </select>
+    <select name="skater_statistic" id="isskater">
+      <option value=goals>Goals</option>
+      <option value="assist">assist</option>
+      <option value="points">Points</option>
+      <option>PIM</option>
+      <option>SOG</option>
+    </select>
+    <select style="display: none" name="goalie_statistic" id="isgoalie">
+      <option value="win">Win</option>
+      <option value="loss">Loss</option>
+      <option value="tie">Tie</option>
+      <option>SO</option>
+    </select>
+    <input type="submit" name="submit" value="Submit">
+  </form>
+
+  <b>See who's on what team:</b><br>
+  <form action="findplayers.php" method="post">
+    Select team:
+    <select name="team">
+      <?php
+        require_once('../../mysqli_connect.php');
+        $query = "SELECT team_name
+                  FROM team
+                  ORDER BY team_name";
+        $response = mysqli_query($dbc, $query);
+        if($response) {
+          while($row = mysqli_fetch_array($response)) {
+            echo "<option>" .$row['team_name'] . "</option>";
+          }
+        } ?>
+    </select><br>
+    <input type="submit" name="submit" value="Submit">
+  </form>
+
+  <b>Who is performing the best/worst in the league?</b><br>
+  <form action="bestworstplayers.php" method="post">
+
+
   <script>
-    function groupSelectType() {
-      var selectBox = document.getElementById("groupSelectBox");
+    function top10SelectType() {
+      var selectBox = document.getElementById("top10SelectBox");
       var selectedValue = selectBox.options[selectBox.selectedIndex].value;
       document.getElementById("skater").style.display = "none";
       document.getElementById("goalie").style.display = "none";
       document.getElementById("team").style.display = "none";
+      document.getElementById(selectedValue).style.display = "";
+    }
+
+    function ISSelectType() {
+      var selectBox = document.getElementById("ISGroupSelectBox");
+      var selectedValue = selectBox.options[selectBox.selectedIndex].value;
+      document.getElementById("isskater").style.display = "none";
+      document.getElementById("isgoalie").style.display = "none";
       document.getElementById(selectedValue).style.display = "";
     }
   </script>

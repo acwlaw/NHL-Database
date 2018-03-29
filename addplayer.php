@@ -116,6 +116,5 @@ if(isset($_POST['submit'])){
     }
 </script>
 
-<? mysqli_close($dbc); ?>
 </body>
 </html>
